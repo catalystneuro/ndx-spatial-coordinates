@@ -26,6 +26,7 @@ def main():
     # release of HDMF.
     ns_builder.include_type('Container', namespace='hdmf-common')
 
+
     # TODO: define your new data types
     # see https://pynwb.readthedocs.io/en/latest/extensions.html#extending-nwb
     # for more information
@@ -174,7 +175,11 @@ def main():
             DatasetSpec(
                 doc='vector image',
                 dtype='float',
-                name='I'
+                name='I',
+                shape=(
+                    [None]*3,
+                    [None]*4
+                )
             )
         ]
     )
@@ -192,35 +197,81 @@ def main():
         ],
     )
 
-    PhysicalObjectType = GroupSpec(
-        data_type_def='PhysicalObjectType',
+    Geometry = GroupSpec(
+        data_type_def='Geometry',
         data_type_inc='Container',
-        doc='physical object type',
-        groups=[
-            GroupSpec(
-                name='geometry',
-                doc='geometry',
-                datasets=[
-                    DatasetSpec(
-                        name='nodes',
-                        doc='nodes',
-                        dtype='float',
-                        shape=(None, 3)
-                    ),
-                    DatasetSpec(
-                        name='edges',
-                        doc='edges',
-                        dtype='uint',
-                        shape=(None, 3)
-                    )
-                ]
-            )
-        ],
+        doc='doc',
         links=[
             LinkSpec(
                 name='coordinate_system',
                 doc='coordinate system',
                 target_type='CoordinateSystem'
+            )
+        ]
+    )
+
+
+    TriangularMeshGeometry = GroupSpec(
+        data_type_def='TriangularMeshGeometry',
+        data_type_inc='Geometry',
+        doc='trimesh geometry',
+        datasets=[
+            DatasetSpec(
+                name='nodes',
+                doc='nodes',
+                dtype='float',
+                shape=(
+                    (None, 2),
+                    (None, 3)
+                )
+            ),
+            DatasetSpec(
+                name='edges',
+                doc='edges',
+                dtype='uint',
+                shape=(None, 3)
+            )
+        ],
+    )
+
+    PhysicalObjectType = GroupSpec(
+        data_type_def='PhysicalObjectType',
+        data_type_inc='Container',
+        doc='physical object with sub objects',
+        datasets=[
+            DatasetSpec(
+                quantity='?',
+                name='children',
+                doc='children',
+                dtype=[
+                    DtypeSpec(
+                        name='position',
+                        doc='position',
+                        dtype='float',
+                        #shape=(
+                        #    (2,),
+                        #    (3,)
+                        #),
+                        #dims=(
+                        #    ('x, y'),
+                        #    ('x, y, z')
+                        #)
+                    ),
+                    DtypeSpec(
+                        name='normal',
+                        doc='normal',
+                        dtype='float',
+                        #shape=(3,)
+                    ),
+                    DtypeSpec(
+                        name='object_type',
+                        doc='object type',
+                        dtype=RefSpec(
+                            target_type='PhysicalObjectType',
+                            reftype='object'
+                        )
+                    ),
+                ]
             )
         ]
     )
@@ -251,51 +302,9 @@ def main():
         ],
     )
 
-    PhysicalObjectWithSubObjectsType = GroupSpec(
-        data_type_def='PhysicalObjectWithSubObjectsType',
-        data_type_inc=PhysicalObjectType,
-        doc='physical object with sub objects',
-        groups=[
-            GroupSpec(
-                name='sites',
-                doc='sites',
-                datasets=[
-                    DatasetSpec(
-                        name='sites',
-                        doc='sites',
-                        dtype=[
-                            DtypeSpec(
-                                name='position',
-                                doc='position',
-                                dtype='float',
-                                #shape=(3,)
-                            ),
-                            DtypeSpec(
-                                name='normal',
-                                doc='normal',
-                                dtype='float',
-                                #shape=(3,)
-                            ),
-                            DtypeSpec(
-                                name='object_type',
-                                doc='object type',
-                                dtype=RefSpec(
-                                    target_type='PhysicalObjectType',
-                                    reftype='object'
-                                )
-                            ),
-                        ]
-                    )
-                ]
-
-            )
-        ]
-
-    )
-
     ProbeType = GroupSpec(
         data_type_def='ProbeType',
-        data_type_inc=PhysicalObjectWithSubObjectsType,
+        data_type_inc=PhysicalObjectType,
         doc='probe type',
     )
 
@@ -314,7 +323,7 @@ def main():
 
     SubjectBrain = GroupSpec(
         data_type_def='SubjectBrain',
-        data_type_inc=PhysicalObjectWithSubObjectsType,
+        data_type_inc=PhysicalObjectType,
         doc='subject brain'
     )
 
@@ -374,7 +383,6 @@ def main():
         PhysicalObjectType,
         ElectrodeType,
         ElectrodeTypes,
-        PhysicalObjectWithSubObjectsType,
         ProbeType,
         ProbeTypes,
         SubjectBrain,

@@ -88,6 +88,14 @@ groups:
   datasets:
   - name: I
     dtype: float
+    shape:
+    - - null
+      - null
+      - null
+    - - null
+      - null
+      - null
+      - null
     doc: vector image
   links:
   - name: domain_coordinate_system
@@ -105,27 +113,23 @@ groups:
     quantity: '*'
 - data_type_def: PhysicalObjectType
   data_type_inc: Container
-  doc: physical object type
-  groups:
-  - name: geometry
-    doc: geometry
-    datasets:
-    - name: nodes
+  doc: physical object with sub objects
+  datasets:
+  - name: children
+    dtype:
+    - name: position
       dtype: float
-      shape:
-      - null
-      - 3
-      doc: nodes
-    - name: edges
-      dtype: uint
-      shape:
-      - null
-      - 3
-      doc: edges
-  links:
-  - name: coordinate_system
-    target_type: CoordinateSystem
-    doc: coordinate system
+      doc: position
+    - name: normal
+      dtype: float
+      doc: normal
+    - name: object_type
+      dtype:
+        target_type: PhysicalObjectType
+        reftype: object
+      doc: object type
+    doc: children
+    quantity: '?'
 - data_type_def: ElectrodeType
   data_type_inc: PhysicalObjectType
   doc: electrode type
@@ -133,26 +137,22 @@ groups:
   - name: electrode_type
     dtype: text
     doc: electrode type
-  groups:
-  - name: geometry
-    doc: geometry
-    datasets:
-    - name: nodes
+  datasets:
+  - name: children
+    dtype:
+    - name: position
       dtype: float
-      shape:
-      - null
-      - 3
-      doc: nodes
-    - name: edges
-      dtype: uint
-      shape:
-      - null
-      - 3
-      doc: edges
-  links:
-  - name: coordinate_system
-    target_type: CoordinateSystem
-    doc: coordinate system
+      doc: position
+    - name: normal
+      dtype: float
+      doc: normal
+    - name: object_type
+      dtype:
+        target_type: PhysicalObjectType
+        reftype: object
+      doc: object type
+    doc: children
+    quantity: '?'
 - data_type_def: ElectrodeTypes
   data_type_inc: Container
   doc: electrode types
@@ -160,86 +160,25 @@ groups:
   - data_type_inc: ElectrodeType
     doc: electrode types are stored here
     quantity: '*'
-- data_type_def: PhysicalObjectWithSubObjectsType
-  data_type_inc: PhysicalObjectType
-  doc: physical object with sub objects
-  groups:
-  - name: sites
-    doc: sites
-    datasets:
-    - name: sites
-      dtype:
-      - name: position
-        dtype: float
-        doc: position
-      - name: normal
-        dtype: float
-        doc: normal
-      - name: object_type
-        dtype:
-          target_type: PhysicalObjectType
-          reftype: object
-        doc: object type
-      doc: sites
-  - name: geometry
-    doc: geometry
-    datasets:
-    - name: nodes
-      dtype: float
-      shape:
-      - null
-      - 3
-      doc: nodes
-    - name: edges
-      dtype: uint
-      shape:
-      - null
-      - 3
-      doc: edges
-  links:
-  - name: coordinate_system
-    target_type: CoordinateSystem
-    doc: coordinate system
 - data_type_def: ProbeType
-  data_type_inc: PhysicalObjectWithSubObjectsType
+  data_type_inc: PhysicalObjectType
   doc: probe type
-  groups:
-  - name: sites
-    doc: sites
-    datasets:
-    - name: sites
-      dtype:
-      - name: position
-        dtype: float
-        doc: position
-      - name: normal
-        dtype: float
-        doc: normal
-      - name: object_type
-        dtype:
-          target_type: PhysicalObjectType
-          reftype: object
-        doc: object type
-      doc: sites
-  - name: geometry
-    doc: geometry
-    datasets:
-    - name: nodes
+  datasets:
+  - name: children
+    dtype:
+    - name: position
       dtype: float
-      shape:
-      - null
-      - 3
-      doc: nodes
-    - name: edges
-      dtype: uint
-      shape:
-      - null
-      - 3
-      doc: edges
-  links:
-  - name: coordinate_system
-    target_type: CoordinateSystem
-    doc: coordinate system
+      doc: position
+    - name: normal
+      dtype: float
+      doc: normal
+    - name: object_type
+      dtype:
+        target_type: PhysicalObjectType
+        reftype: object
+      doc: object type
+    doc: children
+    quantity: '?'
 - data_type_def: ProbeTypes
   data_type_inc: Container
   doc: probe types
@@ -248,45 +187,24 @@ groups:
     doc: probe types are stored here
     quantity: '*'
 - data_type_def: SubjectBrain
-  data_type_inc: PhysicalObjectWithSubObjectsType
+  data_type_inc: PhysicalObjectType
   doc: subject brain
-  groups:
-  - name: sites
-    doc: sites
-    datasets:
-    - name: sites
-      dtype:
-      - name: position
-        dtype: float
-        doc: position
-      - name: normal
-        dtype: float
-        doc: normal
-      - name: object_type
-        dtype:
-          target_type: PhysicalObjectType
-          reftype: object
-        doc: object type
-      doc: sites
-  - name: geometry
-    doc: geometry
-    datasets:
-    - name: nodes
+  datasets:
+  - name: children
+    dtype:
+    - name: position
       dtype: float
-      shape:
-      - null
-      - 3
-      doc: nodes
-    - name: edges
-      dtype: uint
-      shape:
-      - null
-      - 3
-      doc: edges
-  links:
-  - name: coordinate_system
-    target_type: CoordinateSystem
-    doc: coordinate system
+      doc: position
+    - name: normal
+      dtype: float
+      doc: normal
+    - name: object_type
+      dtype:
+        target_type: PhysicalObjectType
+        reftype: object
+      doc: object type
+    doc: children
+    quantity: '?'
 - data_type_def: SpaceInfo
   data_type_inc: Container
   doc: all space info goes in here
