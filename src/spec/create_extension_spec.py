@@ -218,6 +218,7 @@ def main():
         ],
         links=[
             LinkSpec(
+                name='coordinate_system',
                 doc='coordinate system',
                 target_type='CoordinateSystem'
             )
