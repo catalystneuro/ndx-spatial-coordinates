@@ -6,16 +6,8 @@ namespaces:
   doc: Objects for rigorously defining spatial coordinates, object shapes, and transformations
   name: ndx-spatial-coordinates
   schema:
-  - namespace: core
-    neurodata_types:
-    - ElectricalSeries
-    - TimeSeries
-    - NWBDataInterface
-    - NWBContainer
-  - namespace: hdmf-common
-    neurodata_types:
-    - DynamicTableRegion
-    - VectorData
-    - Data
+  - data_types:
+    - Container
+    namespace: hdmf-common
   - source: ndx-spatial-coordinates.extensions.yaml
   version: 0.1.0

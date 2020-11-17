@@ -3,7 +3,7 @@
 import os.path
 
 from hdmf.spec import NamespaceBuilder, GroupSpec, AttributeSpec, \
-    LinkSpec, DatasetSpec, DtypeSpec, RefSpec
+    LinkSpec, DatasetSpec, DtypeSpec, RefSpec, export_spec
 
 
 def main():
@@ -60,6 +60,20 @@ def main():
         data_type_def='CoordinateSystem',
         data_type_inc='Container',
         doc='coordinate system',
+        links=[
+            LinkSpec(
+                doc='link to space',
+                target_type='Space',
+                name='space'
+            )
+        ],
+        attributes=[
+            AttributeSpec(
+                name='R',
+                doc='dimensionality of coordinate system',
+                dtype='int'
+            )
+        ]
     )
 
     CoordinateSystems = GroupSpec(
@@ -73,13 +87,6 @@ def main():
                 doc='coordinate systems are stored here'
             )
         ],
-        links=[
-            LinkSpec(
-                doc='link to space',
-                target_type='Space',
-                name='space'
-            )
-        ]
     )
 
     RegistrationProtocol = GroupSpec(
@@ -153,6 +160,7 @@ def main():
             DatasetSpec(
                 doc='affine transform matrix',
                 dtype='float',
+                shape=(None, None),
                 name='M'
             )
         ]
@@ -240,7 +248,7 @@ def main():
                 doc='electrode types are stored here'
             )
         ],
-    ),
+    )
 
     PhysicalObjectWithSubObjectsType = GroupSpec(
         data_type_def='PhysicalObjectWithSubObjectsType',
@@ -349,9 +357,28 @@ def main():
         ]
     )
 
-
-    # TODO: add all of your new data types to this list
-    new_data_types = [SpaceInfo, AffineTransform, DeformableTransform]
+    new_data_types = [
+        Space,
+        Spaces,
+        CoordinateSystem,
+        CoordinateSystems,
+        RegistrationProtocol,
+        RegistrationProtocols,
+        CoordinateRegistrationProcess,
+        CoordinateRegistrationProcesses,
+        Transform,
+        AffineTransform,
+        DeformableTransform,
+        Transforms,
+        PhysicalObjectType,
+        ElectrodeType,
+        ElectrodeTypes,
+        PhysicalObjectWithSubObjectsType,
+        ProbeType,
+        ProbeTypes,
+        SubjectBrain,
+        SpaceInfo
+    ]
 
     # export the spec to yaml files in the spec folder
     output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'spec'))

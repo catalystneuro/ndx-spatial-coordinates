@@ -1,8 +1,304 @@
 groups:
-- neurodata_type_def: TetrodeSeries
-  neurodata_type_inc: ElectricalSeries
-  doc: An extension of ElectricalSeries to include the tetrode ID for each time series.
+- data_type_def: Space
+  data_type_inc: Container
+  doc: space
   attributes:
-  - name: trode_id
-    dtype: int32
-    doc: The tetrode ID.
+  - name: R
+    dtype: int
+    doc: dimensionality of space
+- data_type_def: Spaces
+  data_type_inc: Container
+  doc: contains spaces
+  groups:
+  - data_type_inc: Space
+    doc: spaces are stored here
+    quantity: '*'
+- data_type_def: CoordinateSystem
+  data_type_inc: Container
+  doc: coordinate system
+  attributes:
+  - name: R
+    dtype: int
+    doc: dimensionality of coordinate system
+  links:
+  - name: space
+    target_type: Space
+    doc: link to space
+- data_type_def: CoordinateSystems
+  data_type_inc: Container
+  doc: coordinate systems
+  groups:
+  - data_type_inc: CoordinateSystem
+    doc: coordinate systems are stored here
+    quantity: '*'
+- data_type_def: RegistrationProtocol
+  data_type_inc: Container
+  doc: registration protocol
+- data_type_def: RegistrationProtocols
+  data_type_inc: Container
+  doc: registration protocols
+  groups:
+  - data_type_inc: RegistrationProtocol
+    doc: registration protocols are stored here
+    quantity: '*'
+- data_type_def: CoordinateRegistrationProcess
+  data_type_inc: Container
+  doc: coordinate registration process
+  links:
+  - name: registration_protocol
+    target_type: RegistrationProtocol
+    doc: registration protocol
+- data_type_def: CoordinateRegistrationProcesses
+  data_type_inc: Container
+  doc: registration process
+  groups:
+  - data_type_inc: CoordinateRegistrationProcess
+    doc: registration processes are stored here
+    quantity: '*'
+- data_type_def: Transform
+  data_type_inc: Container
+  doc: transform
+  links:
+  - name: domain_coordinate_system
+    target_type: CoordinateSystem
+    doc: domain coordinate system
+  - name: range_coordinate_system
+    target_type: CoordinateSystem
+    doc: range coordinate system
+- data_type_def: AffineTransform
+  data_type_inc: Transform
+  doc: affine transform
+  datasets:
+  - name: M
+    dtype: float
+    shape:
+    - null
+    - null
+    doc: affine transform matrix
+  links:
+  - name: domain_coordinate_system
+    target_type: CoordinateSystem
+    doc: domain coordinate system
+  - name: range_coordinate_system
+    target_type: CoordinateSystem
+    doc: range coordinate system
+- data_type_def: DeformableTransform
+  data_type_inc: Transform
+  doc: deformable transform
+  datasets:
+  - name: I
+    dtype: float
+    doc: vector image
+  links:
+  - name: domain_coordinate_system
+    target_type: CoordinateSystem
+    doc: domain coordinate system
+  - name: range_coordinate_system
+    target_type: CoordinateSystem
+    doc: range coordinate system
+- data_type_def: Transforms
+  data_type_inc: Container
+  doc: transforms
+  groups:
+  - data_type_inc: Transform
+    doc: transforms are stored here
+    quantity: '*'
+- data_type_def: PhysicalObjectType
+  data_type_inc: Container
+  doc: physical object type
+  groups:
+  - name: geometry
+    doc: geometry
+    datasets:
+    - name: nodes
+      dtype: float
+      shape:
+      - null
+      - 3
+      doc: nodes
+    - name: edges
+      dtype: uint
+      shape:
+      - null
+      - 3
+      doc: edges
+  links:
+  - target_type: CoordinateSystem
+    doc: coordinate system
+- data_type_def: ElectrodeType
+  data_type_inc: PhysicalObjectType
+  doc: electrode type
+  attributes:
+  - name: electrode_type
+    dtype: text
+    doc: electrode type
+  groups:
+  - name: geometry
+    doc: geometry
+    datasets:
+    - name: nodes
+      dtype: float
+      shape:
+      - null
+      - 3
+      doc: nodes
+    - name: edges
+      dtype: uint
+      shape:
+      - null
+      - 3
+      doc: edges
+  links:
+  - target_type: CoordinateSystem
+    doc: coordinate system
+- data_type_def: ElectrodeTypes
+  data_type_inc: Container
+  doc: electrode types
+  groups:
+  - data_type_inc: ElectrodeType
+    doc: electrode types are stored here
+    quantity: '*'
+- data_type_def: PhysicalObjectWithSubObjectsType
+  data_type_inc: PhysicalObjectType
+  doc: physical object with sub objects
+  groups:
+  - name: sites
+    doc: sites
+    datasets:
+    - name: sites
+      dtype:
+      - name: position
+        dtype: float
+        doc: position
+      - name: normal
+        dtype: float
+        doc: normal
+      - name: object_type
+        dtype:
+          target_type: PhysicalObjectType
+          reftype: object
+        doc: object type
+      doc: sites
+  - name: geometry
+    doc: geometry
+    datasets:
+    - name: nodes
+      dtype: float
+      shape:
+      - null
+      - 3
+      doc: nodes
+    - name: edges
+      dtype: uint
+      shape:
+      - null
+      - 3
+      doc: edges
+  links:
+  - target_type: CoordinateSystem
+    doc: coordinate system
+- data_type_def: ProbeType
+  data_type_inc: PhysicalObjectWithSubObjectsType
+  doc: probe type
+  groups:
+  - name: sites
+    doc: sites
+    datasets:
+    - name: sites
+      dtype:
+      - name: position
+        dtype: float
+        doc: position
+      - name: normal
+        dtype: float
+        doc: normal
+      - name: object_type
+        dtype:
+          target_type: PhysicalObjectType
+          reftype: object
+        doc: object type
+      doc: sites
+  - name: geometry
+    doc: geometry
+    datasets:
+    - name: nodes
+      dtype: float
+      shape:
+      - null
+      - 3
+      doc: nodes
+    - name: edges
+      dtype: uint
+      shape:
+      - null
+      - 3
+      doc: edges
+  links:
+  - target_type: CoordinateSystem
+    doc: coordinate system
+- data_type_def: ProbeTypes
+  data_type_inc: Container
+  doc: probe types
+  groups:
+  - data_type_inc: ProbeType
+    doc: probe types are stored here
+    quantity: '*'
+- data_type_def: SubjectBrain
+  data_type_inc: PhysicalObjectWithSubObjectsType
+  doc: subject brain
+  groups:
+  - name: sites
+    doc: sites
+    datasets:
+    - name: sites
+      dtype:
+      - name: position
+        dtype: float
+        doc: position
+      - name: normal
+        dtype: float
+        doc: normal
+      - name: object_type
+        dtype:
+          target_type: PhysicalObjectType
+          reftype: object
+        doc: object type
+      doc: sites
+  - name: geometry
+    doc: geometry
+    datasets:
+    - name: nodes
+      dtype: float
+      shape:
+      - null
+      - 3
+      doc: nodes
+    - name: edges
+      dtype: uint
+      shape:
+      - null
+      - 3
+      doc: edges
+  links:
+  - target_type: CoordinateSystem
+    doc: coordinate system
+- data_type_def: SpaceInfo
+  data_type_inc: Container
+  doc: all space info goes in here
+  groups:
+  - data_type_inc: Spaces
+    doc: spaces
+  - data_type_inc: CoordinateSystems
+    doc: coordinate systems
+  - data_type_inc: RegistrationProtocols
+    doc: registration protocols
+  - data_type_inc: CoordinateRegistrationProcesses
+    doc: registration processes
+  - data_type_inc: Transforms
+    doc: transforms
+  - data_type_inc: ElectrodeTypes
+    doc: electrode types
+  - data_type_inc: ProbeTypes
+    doc: probe types
+  - data_type_inc: SubjectBrain
+    doc: subject brain
